@@ -246,39 +246,44 @@ this.connector.get((data, error) => {
   postRecord(callback) {
     /**
      * Write the body for this function.
-     * The function is a wrapper for this.connector's post() method.
+     * The function is a wrapper for this.connector's get() method.
      * Note how the object was instantiated in the constructor().
-     * post() takes a callback function.
-     */
-     let callbackData = null;
+     * get() takes a callback function.
+     */          
+    let callbackData = null;
     let callbackError = null;
-  
-    
-    this.connector.post(this.connector,(data, error) => {
-   if (error) {
-    
-      callbackError=error
+   
+this.connector.get((data, error) => {
+    if (error) {
+     callbackError=error
     }
-    callbackData=data;
     
-   var jsonstring = JSON.stringify(data);
-    
+    var jsonstring = JSON.stringify(data);
+    // jsonObject will contain a valid JavaScript object
     let jsonObject =  JSON.parse(jsonstring);//eval('(' + jsonstring + ')');
     let jsonbodystirng = JSON.stringify(jsonObject.body);
     let jsonresultobj = JSON.parse(jsonObject.body);
-     let servicejsonobj= JSON.stringify(jsonresultobj.result[0]);
-    let jsonresultobjresult = JSON.parse(servicejsonobj);
-    let servicejsonObjResult={
-                               change_ticket_number: jsonresultobjresult.number,
-                                active: jsonresultobjresult.active,
-                                priority: jsonresultobjresult.priority,
-                                description: jsonresultobjresult.description,
-                                work_start: jsonresultobjresult.work_start,
-                                work_end: jsonresultobjresult.work_end,
-                                change_ticket_key: jsonresultobjresult.sys_id
+     //log.info("call data in json13:"+JSON.stringify(jsonresultobj.result[0]));
+     log.info("jsonresultobj.result.length array::"+jsonresultobj.result.length);
+     let servicejsonObjResult=null;
+     for(let i=0;i<jsonresultobj.result.length; i++){
+        let servicejsonobjarray= JSON.stringify(jsonresultobj.result[i]);     
+         let jsonresultobjresultarray = JSON.parse(servicejsonobjarray);
+         servicejsonObjResult=[{
+                               change_ticket_number: jsonresultobjresultarray.number,
+                                active: jsonresultobjresultarray.active,
+                                priority: jsonresultobjresultarray.priority,
+                                description: jsonresultobjresultarray.description,
+                                work_start: jsonresultobjresultarray.work_start,
+                                work_end: jsonresultobjresultarray.work_end,
+                                change_ticket_key: jsonresultobjresultarray.sys_id
                             }
+          ]
+     }
+        callbackData=data;
         return callback(servicejsonObjResult, callbackError);
   });
+ // log.info("call data in json1:"+JSON.stringify(calldata));
   }
 
 }
