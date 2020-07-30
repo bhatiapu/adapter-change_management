@@ -80,10 +80,10 @@ class ServiceNowConnector {
    */
   post(callback) {
      // log.info("calling POST in connector.>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-    let postCallOptions = this.options;
-    postCallOptions.method = 'POST';
-    postCallOptions.query = null;
-    this.sendRequest(postCallOptions, (results, error) => callback(results, error));
+    let callOptions = this.options;
+	    callOptions.serviceNowTable = 'change_request';
+	    callOptions.method = 'POST';
+	  this.sendRequest(callOptions, (results, error) => callback(results, error));
   }
 
   

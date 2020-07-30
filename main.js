@@ -244,46 +244,36 @@ this.connector.get((data, error) => {
    *   handles the response.
    */
   postRecord(callback) {
-    /**
-     * Write the body for this function.
-     * The function is a wrapper for this.connector's get() method.
-     * Note how the object was instantiated in the constructor().
-     * get() takes a callback function.
-     */          
-    let callbackData = null;
+      log.info("Calling ............................ppostRecord");
+     let callbackData = null;
     let callbackError = null;
-   
-this.connector.get((data, error) => {
-    if (error) {
-     callbackError=error
-    }
+  
+    this.connector.post((data, error) => {
+   if (error) {
     
-    var jsonstring = JSON.stringify(data);
-    // jsonObject will contain a valid JavaScript object
-    let jsonObject =  JSON.parse(jsonstring);//eval('(' + jsonstring + ')');
-    let jsonbodystirng = JSON.stringify(jsonObject.body);
+      callbackError=error
+    }
+    //callbackData=data;
+    log.info("PostRecord1 -------data......>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+data);
+   var jsonstring = JSON.stringify(data);
+   //log.info("postRecord -------jsonstring......>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+jsonstring);
+   let jsonObject =  JSON.parse(jsonstring);
     let jsonresultobj = JSON.parse(jsonObject.body);
-     //log.info("call data in json13:"+JSON.stringify(jsonresultobj.result[0]));
-     log.info("jsonresultobj.result.length array::"+jsonresultobj.result.length);
-     let servicejsonObjResult=null;
-     for(let i=0;i<jsonresultobj.result.length; i++){
-        let servicejsonobjarray= JSON.stringify(jsonresultobj.result[i]);     
-         let jsonresultobjresultarray = JSON.parse(servicejsonobjarray);
-         servicejsonObjResult=[{
-                               change_ticket_number: jsonresultobjresultarray.number,
-                                active: jsonresultobjresultarray.active,
-                                priority: jsonresultobjresultarray.priority,
-                                description: jsonresultobjresultarray.description,
-                                work_start: jsonresultobjresultarray.work_start,
-                                work_end: jsonresultobjresultarray.work_end,
-                                change_ticket_key: jsonresultobjresultarray.sys_id
+    log.info("PostRecord -------jsonresultobj.result.length means the length of the array::"+jsonresultobj.result.length);
+     let servicejsonobj= JSON.stringify(jsonresultobj.result[0]);
+    let jsonresultobjresult = JSON.parse(servicejsonobj);
+    let serviceNowjsonResult={
+         change_ticket_number: jsonresultobjresult.number,
+         active: jsonresultobjresult.active,
+         priority: jsonresultobjresult.priority,
+         description: jsonresultobjresult.description,
+         work_start: jsonresultobjresult.work_start,
+         work_end: jsonresultobjresult.work_end,
+         change_ticket_key: jsonresultobjresult.sys_id
                             }
-          ]
-     }
-        callbackData=data;
-        return callback(servicejsonObjResult, callbackError);
+        callbackData=data;                            
+        return callback(serviceNowjsonResult, callbackError);
   });
- // log.info("call data in json1:"+JSON.stringify(calldata));
   }
 
 }
